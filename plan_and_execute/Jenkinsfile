@@ -25,11 +25,6 @@ pipeline {
             }
         }
       }
-      stage('Approve Plan') {
-          steps {
-                input 'Apply play?'
-            }
-      }
       stage('Apply') {
           steps {
               echo 'Executing Ansible playbook'
