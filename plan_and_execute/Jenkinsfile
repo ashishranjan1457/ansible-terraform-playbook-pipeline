@@ -12,7 +12,7 @@ pipeline {
                            doGenerateSubmoduleConfigurations: false,
                            extensions: [],
                            submoduleCfg: [],
-                           userRemoteConfigs: [[url: $PLAYBOOK_URL]]])
+                           userRemoteConfigs: [[url: 'https://github.com/ashishranjan1457/ansible-terraform-playbook']]])
             }
         }
         stage('Plan') {
