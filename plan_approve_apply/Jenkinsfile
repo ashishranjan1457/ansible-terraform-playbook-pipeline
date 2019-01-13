@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Cleaning workspace'
+                cleanWs()
+                echo 'Checking out..'
+                checkout([$class: 'GitSCM', 
+                           branches: [[name: '*/master']],
+                           doGenerateSubmoduleConfigurations: false,
+                           extensions: [], 
+                           submoduleCfg: [],
+                           userRemoteConfigs: [[url: 'https://github.com/ashishranjan1457/ansible-terraform-playbook']]])
+            }
+        }
+        stage('Plan') {
+            steps {
+                echo 'Executing Ansible playbook'
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AWS_DEMO',
+                usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                sh 'ansible-playbook playbook.yaml --extra-vars "aws_access_key=$USERNAME aws_secret_key=$PASSWORD input_state=planned"'
+              
+            }
+        }
+      }
+      stage('Approve Plan') {
+          steps {
+                input 'Apply play?'
+            }
+      }
+      stage('Apply') {
+          steps {
+              echo 'Executing Ansible playbook'
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AWS_DEMO',
+              usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+              sh 'ansible-playbook playbook.yaml --extra-vars "aws_access_key=$USERNAME aws_secret_key=$PASSWORD input_state=present"'
+            
+          }
+      }
+    }
+  }  
+}
