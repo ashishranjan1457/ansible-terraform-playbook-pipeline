@@ -20,7 +20,7 @@ pipeline {
                 echo 'Executing Ansible playbook'
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AWS_DEMO',
                 usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                sh 'ansible-playbook playbook_new.yaml --extra-vars "aws_access_key=$USERNAME aws_secret_key=$PASSWORD input_state=planned"'
+                sh 'ansible-playbook playbook.yaml --extra-vars "aws_access_key=$USERNAME aws_secret_key=$PASSWORD input_state=planned"'
 
             }
         }
@@ -30,7 +30,7 @@ pipeline {
               echo 'Executing Ansible playbook'
               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AWS_DEMO',
               usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-              sh 'ansible-playbook playbook_new.yaml --extra-vars "aws_access_key=$USERNAME aws_secret_key=$PASSWORD input_state=present"'
+              sh 'ansible-playbook playbook.yaml --extra-vars "aws_access_key=$USERNAME aws_secret_key=$PASSWORD input_state=present"'
 
           }
       }
